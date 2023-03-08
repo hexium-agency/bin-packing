@@ -1,0 +1,28 @@
+{
+    "name": "hexium/bin-packing",
+    "description": "A bin packing library based on Joseph El Hayek's research",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hexium\\BinPacking\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexandre Gérault",
+            "email": "gerault-alexandre@orange.fr"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.22"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

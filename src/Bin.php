@@ -37,4 +37,29 @@ class Bin
             $this->nodeList->nodes[] = new Node($x, $y + $item->height());
         }
     }
+
+    public function canFit(Test\TestItem $bigItem, Node $node): bool
+    {
+        $x = $node->x;
+        $y = $node->y;
+
+        if ($x + $bigItem->width() > $this->width) {
+            return false;
+        }
+
+        if ($y + $bigItem->height() > $this->height) {
+            return false;
+        }
+
+        $x2 = $x + $bigItem->width();
+        $y2 = $y + $bigItem->height();
+
+        foreach ($this->rectangles as $rectangle) {
+            if ($rectangle->x >= $x && $rectangle->x < $x2 && $rectangle->y >= $y && $rectangle->y < $y2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

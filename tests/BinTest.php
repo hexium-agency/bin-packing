@@ -4,7 +4,7 @@ use Hexium\BinPacking\Bin;
 use Hexium\BinPacking\Node;
 use Hexium\BinPacking\Test\TestItem;
 
-it('has a default node', function () {
+it('places items', function () {
     $bin = new Bin(100, 100);
 
     expect($bin->rectangles)->toBeArray()->toHaveCount(0)
@@ -53,4 +53,22 @@ it('has a default node', function () {
         ->and($bin->nodeList()->at(40, 0))->toBeInstanceOf(Node::class)
         ->and($bin->nodeList()->at(10, 30))->toBeInstanceOf(Node::class)
         ->and($bin->nodeList()->at(30, 10))->toBeInstanceOf(Node::class);
+});
+
+it('can say if an item can fit for a given node', function () {
+    $bin = new Bin(100, 100);
+
+    $item = new TestItem(10, 10, "item1");
+
+    $bin->placeItem($item, 0, 0);
+
+    $bigItem = new TestItem(10, 100, "item2");
+
+    $node = $bin->nodeList()->at(10, 0);
+
+    expect($bin->canFit($bigItem, $node))->toBeTrue();
+
+    $node = $bin->nodeList()->at(0, 10);
+
+    expect($bin->canFit($bigItem, $node))->toBeFalse();
 });

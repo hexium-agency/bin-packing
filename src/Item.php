@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
-class Item
+interface Item
 {
-    public function __construct(public int $width, public int $height)
-    {
-    }
+    public function id(): string ;
+
+    public function width(): int;
+
+    public function height(): int;
+
+    public function area(): int;
 }

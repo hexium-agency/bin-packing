@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
-class PackedItem
+readonly class PackedItem
 {
     public function __construct(
-        public readonly Item $item,
-        public readonly Bin $bin,
-        public readonly int $xPosition,
-        public readonly int $yPosition,
+        public Item $item,
+        public Bin $bin,
+        public int $xPosition,
+        public int $yPosition,
     ) {
     }
 }

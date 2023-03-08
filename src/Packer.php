@@ -7,6 +7,8 @@ namespace Hexium\BinPacking;
 class Packer
 {
     /**
+     * @param array<Bin> $bins
+     * @param array<Item> $items
      * @throws CannotPackItems
      */
     public function pack(array $bins, array $items): array
@@ -35,9 +37,9 @@ class Packer
      * @return void
      * @throws CannotPackItems
      */
-    private function ensureItemFitInAtLeastOneBin(mixed $item, mixed $bin): void
+    private function ensureItemFitInAtLeastOneBin(Item $item, Bin $bin): void
     {
-        if ($item->width > $bin->width || $item->height > $bin->height) {
+        if ($item->width() > $bin->width || $item->height() > $bin->height) {
             throw new CannotPackItems();
         }
     }

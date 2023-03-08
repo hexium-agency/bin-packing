@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
-class Bin
+readonly class Bin
 {
     public function __construct(public int $width, public int $height)
     {

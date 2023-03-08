@@ -1,8 +1,8 @@
 <?php
 
 use Hexium\BinPacking\ItemList;
-use Hexium\BinPacking\Sorters\ItemAreaSorter;
-use Hexium\BinPacking\Sorters\ItemHeightSorter;
+use Hexium\BinPacking\ItemSorters\ItemAreaSorter;
+use Hexium\BinPacking\ItemSorters\ItemHeightSorter;
 use Hexium\BinPacking\Test\TestItem;
 
 it('sort items by height', function () {

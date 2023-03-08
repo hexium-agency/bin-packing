@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hexium\BinPacking\Sorters;
+namespace Hexium\BinPacking\ItemSorters;
 
 use Hexium\BinPacking\Item;
 use Hexium\BinPacking\ItemList;

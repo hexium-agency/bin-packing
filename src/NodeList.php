@@ -16,6 +16,15 @@ class NodeList implements \Countable
         $this->nodes[] = new Node(0, 0);
     }
 
+    public static function fromList(array $nodeList): NodeList
+    {
+        $self = new self();
+
+        $self->nodes = $nodeList;
+
+        return $self;
+    }
+
     public function count(): int
     {
         return count($this->nodes);

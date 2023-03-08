@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
+use Hexium\BinPacking\NodeSorters\AscendingXNodeSorter;
+
 class Packer
 {
     /**
@@ -17,14 +19,22 @@ class Packer
 
         foreach ($items as $item) {
             foreach ($bins as $bin) {
-                $this->ensureItemFitInAtLeastOneBin($item, $bin);
+                $this->assertItemFitsInAtLeastOneBin($item, $bin);
 
-                $packedItems[] = new PackedItem(
-                    item: $item,
-                    bin: $bin,
-                    xPosition: 0,
-                    yPosition: 0,
-                );
+                $nodeSorter = new AscendingXNodeSorter();
+
+                $nodeList = $nodeSorter->sort($bin->nodeList());
+
+                foreach ($nodeList->nodes as $node) {
+                    if (!$bin->canFit($item, $node)) {
+                        continue;
+                    }
+
+                    $bin->placeItem($item, $node->x, $node->y);
+                    $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
+
+                    break;
+                }
             }
         }
 
@@ -32,12 +42,12 @@ class Packer
     }
 
     /**
-     * @param mixed $item
-     * @param mixed $bin
+     * @param Item $item
+     * @param Bin $bin
      * @return void
      * @throws CannotPackItems
      */
-    private function ensureItemFitInAtLeastOneBin(Item $item, Bin $bin): void
+    private function assertItemFitsInAtLeastOneBin(Item $item, Bin $bin): void
     {
         if ($item->width() > $bin->width || $item->height() > $bin->height) {
             throw new CannotPackItems();

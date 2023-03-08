@@ -18,7 +18,8 @@
         "php": "^8.2"
     },
     "require-dev": {
-        "pestphp/pest": "^1.22"
+        "pestphp/pest": "^1.22",
+        "spatie/ray": "^1.37"
     },
     "config": {
         "allow-plugins": {

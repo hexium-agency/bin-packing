@@ -72,3 +72,18 @@ it('can say if an item can fit for a given node', function () {
 
     expect($bin->canFit($bigItem, $node))->toBeFalse();
 });
+
+it('does not create a node when it is in the middle of another rectangle edge', function () {
+    $item1 = new TestItem(width: 1, height: 5, id: "item1");
+    $item2 = new TestItem(width: 2, height: 3, id: "item2");
+    $item3 = new TestItem(width: 2, height: 5, id: "item3");
+    $item4 = new TestItem(width: 2, height: 2, id: "item4");
+
+    $bin = new Bin(8, 8);
+
+    $bin->placeItem($item1, 0, 0);
+    $bin->placeItem($item2, 0, 5);
+    $bin->placeItem($item3, 1, 0);
+
+    expect($bin->canFit($item4, $bin->nodeList()->at(1, 5)))->toBeFalse();
+});

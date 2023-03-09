@@ -65,7 +65,7 @@ it('can place two items side by side in a bin', function () {
         ->and($packedItems[1]->yPosition)->toBe(0);
 });
 
-it('places two second item below the first one if height available', function () {
+it('places second item below the first one if height available', function () {
     $packer = new Packer();
 
     $bins = [new Bin(width: 20, height: 20)];
@@ -83,27 +83,27 @@ it('places two second item below the first one if height available', function ()
         ->and($packedItems[1]->xPosition)->toBe(0)
         ->and($packedItems[1]->yPosition)->toBe(10);
 });
-//
-//it('places complex items', function () {
-//    $packer = new Packer();
-//
-//    $bins = [new Bin(width: 8, height: 8)];
-//
-//    $items = [
-//        new TestItem(width: 1, height: 5, id:"item1"),
-//        new TestItem(width: 2, height: 3, id:"item2"),
-//        new TestItem(width: 2, height: 3, id:"item3"),
-//        new TestItem(width: 2, height: 2, id:"item4"),
-//        new TestItem(width: 1, height: 2, id:"item5"),
-//    ];
-//
-//    $packedItems = $packer->pack($bins, $items);
-//
-//    expect($packedItems)->toBeArray()->toHaveCount(5)
-//        ->and($packedItems[0]->xPosition)->toBe(0)->and($packedItems[0]->yPosition)->toBe(0)
-//        ->and($packedItems[1]->xPosition)->toBe(0)->and($packedItems[1]->yPosition)->toBe(5)
-//        ->and($packedItems[2]->xPosition)->toBe(2)->and($packedItems[2]->yPosition)->toBe(0)
-//        ->and($packedItems[3]->xPosition)->toBe(4)->and($packedItems[3]->yPosition)->toBe(0)
-//        ->and($packedItems[4]->xPosition)->toBe(6)->and($packedItems[4]->yPosition)->toBe(0)
-//    ;
-//});
+
+it('places complex items', function () {
+    $packer = new Packer();
+
+    $bins = [new Bin(width: 8, height: 8)];
+
+    $items = [
+        new TestItem(width: 1, height: 5, id:"item1"),
+        new TestItem(width: 2, height: 3, id:"item2"),
+        new TestItem(width: 2, height: 3, id:"item3"),
+        new TestItem(width: 2, height: 2, id:"item4"),
+        new TestItem(width: 1, height: 2, id:"item5"),
+    ];
+
+    $packedItems = $packer->pack($bins, $items);
+
+    expect($packedItems)->toBeArray()->toHaveCount(5)
+        ->and($packedItems[0]->xPosition)->toBe(0)->and($packedItems[0]->yPosition)->toBe(0)
+        ->and($packedItems[1]->xPosition)->toBe(0)->and($packedItems[1]->yPosition)->toBe(5)
+        ->and($packedItems[2]->xPosition)->toBe(1)->and($packedItems[2]->yPosition)->toBe(0)
+        ->and($packedItems[3]->xPosition)->toBe(1)->and($packedItems[3]->yPosition)->toBe(3)
+        ->and($packedItems[4]->xPosition)->toBe(2)->and($packedItems[4]->yPosition)->toBe(5)
+    ;
+});

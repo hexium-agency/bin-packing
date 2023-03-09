@@ -23,7 +23,7 @@ class Bin
         return $this->nodeList;
     }
 
-    public function placeItem(Test\TestItem $item, int $x, int $y): void
+    public function placeItem(Item $item, int $x, int $y): void
     {
         $this->nodeList->removeNodesFrom($x, $y, $x, $item->height());
 
@@ -38,7 +38,7 @@ class Bin
         }
     }
 
-    public function canFit(Test\TestItem $bigItem, Node $node): bool
+    public function canFit(Item $bigItem, Node $node): bool
     {
         $x = $node->x;
         $y = $node->y;

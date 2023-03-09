@@ -6,7 +6,7 @@ namespace Hexium\BinPacking;
 
 interface Item
 {
-    public function id(): string ;
+    public function id(): string;
 
     public function width(): int;
 

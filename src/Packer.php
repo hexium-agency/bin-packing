@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
-use Hexium\BinPacking\NodeSorters\AscendingXNodeSorter;
+use Hexium\BinPacking\NodeSorters\LeftNodesFirstSorter;
 
 class Packer
 {
@@ -21,7 +21,7 @@ class Packer
             foreach ($bins as $bin) {
                 $this->assertItemFitsInAtLeastOneBin($item, $bin);
 
-                $nodeSorter = new AscendingXNodeSorter();
+                $nodeSorter = new LeftNodesFirstSorter();
 
                 $nodeList = $nodeSorter->sort($bin->nodeList());
 

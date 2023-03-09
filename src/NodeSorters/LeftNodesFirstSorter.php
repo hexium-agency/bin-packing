@@ -8,7 +8,7 @@ use Hexium\BinPacking\Node;
 use Hexium\BinPacking\NodeList;
 use Hexium\BinPacking\NodeSorter;
 
-class AscendingXNodeSorter implements NodeSorter
+class LeftNodesFirstSorter implements NodeSorter
 {
     public function sort(NodeList $nodes): NodeList
     {

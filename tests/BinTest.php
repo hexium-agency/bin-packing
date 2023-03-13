@@ -87,3 +87,29 @@ it('check it cannot place an item inside an existing rectangle', function () {
 
     expect($bin->canFit($item4, $bin->nodeList()->at(1, 5)))->toBeFalse();
 });
+
+it('cannot place an item that is overlapping another rectangle without common X ou Y', function () {
+    $bin = new Bin(8, 8);
+
+    $item1 = new TestItem(width: 1, height: 5, id: "item1");
+    $bin->placeItem($item1, 0, 0);
+
+    $item2 = new TestItem(width: 1, height: 4, id: "item2");
+    $bin->placeItem($item2, 1, 0);
+
+    $item3 = new TestItem(width: 4, height: 4, id: "item3");
+    $bin->placeItem($item3, 1, 4);
+
+    $item4 = new TestItem(width: 1, height: 3, id: "item4");
+    $bin->placeItem($item4, 0, 5);
+
+    $item5 = new TestItem(width: 1, height: 3, id: "item5");
+    $bin->placeItem($item5, 2, 0);
+
+    $item6 = new TestItem(width: 1, height: 3, id: "item6");
+    expect($bin->canFit($item6, $bin->nodeList()->at(2, 3)))->toBeFalse();
+    $bin->placeItem($item6, 3, 0);
+
+    $item7 = new TestItem(width: 3, height: 3, id: "item7");
+    expect($bin->canFit($item7, $bin->nodeList()->at(3, 3)))->toBeFalse();
+});

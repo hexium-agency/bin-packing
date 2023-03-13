@@ -55,16 +55,30 @@ class Bin
         $y2 = $y + $bigItem->height();
 
         foreach ($this->rectangles as $rectangle) {
-            // Check the node is not inside a rectangle
+            // Check upper left corner is not inside a rectangle
             if ($rectangle->x <= $x && $rectangle->x + $rectangle->width > $x
                 && $rectangle->y <= $y && $rectangle->y + $rectangle->height > $y
             ) {
                 return false;
             }
 
-            // Check the end of item is not inside a rectangle
+            // Check the bottom right corner is not inside a rectangle
             if ($rectangle->x < $x2 && $rectangle->x + $rectangle->width >= $x2
                 && $rectangle->y < $y2 && $rectangle->y + $rectangle->height >= $y2
+            ) {
+                return false;
+            }
+
+            // Check the bottom left corner is not inside a rectangle
+            if ($rectangle->x <= $x && $rectangle->x + $rectangle->width > $x
+                && $rectangle->y < $y2 && $rectangle->y + $rectangle->height >= $y2
+            ) {
+                return false;
+            }
+
+            // Check the top right corner is not inside a rectangle
+            if ($rectangle->x < $x2 && $rectangle->x + $rectangle->width >= $x2
+                && $rectangle->y <= $y && $rectangle->y + $rectangle->height > $y
             ) {
                 return false;
             }

@@ -82,6 +82,34 @@ class Bin
             ) {
                 return false;
             }
+
+            // Check the upper edge does not intersect the left side of a rectangle neither the right side
+            if ($rectangle->x < $x2 && $rectangle->x + $rectangle->width > $x
+                && $rectangle->y <= $y && $rectangle->y + $rectangle->height > $y
+            ) {
+                return false;
+            }
+
+            // Check the bottom edge does not intersect the left side of a rectangle neither the right side
+            if ($rectangle->x < $x2 && $rectangle->x + $rectangle->width > $x
+                && $rectangle->y < $y2 && $rectangle->y + $rectangle->height >= $y2
+            ) {
+                return false;
+            }
+
+            // Check the left edge does not intersect the top side of a rectangle neither the bottom side
+            if ($rectangle->x <= $x && $rectangle->x + $rectangle->width > $x
+                && $rectangle->y < $y2 && $rectangle->y + $rectangle->height > $y
+            ) {
+                return false;
+            }
+
+            // Check the right edge does not intersect the top side of a rectangle neither the bottom side
+            if ($rectangle->x < $x2 && $rectangle->x + $rectangle->width >= $x2
+                && $rectangle->y < $y2 && $rectangle->y + $rectangle->height > $y
+            ) {
+                return false;
+            }
         }
 
         return true;

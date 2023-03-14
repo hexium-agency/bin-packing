@@ -11,16 +11,18 @@ class Packer
     /**
      * @param array<Bin> $bins
      * @param array<Item> $items
-     * @throws CannotPackItems
+     * @throws ItemCannotFitInAnyBins
+     * @throws ItemCannotBePlacedInRemainingBins
      */
     public function pack(array $bins, array $items): array
     {
         $packedItems = [];
 
         foreach ($items as $item) {
-            foreach ($bins as $bin) {
-                $this->assertItemFitsInAtLeastOneBin($item, $bin);
+            $this->assertItemFitsInAtLeastOneBin($item, $bins);
+            $hasBeenPlaced = false;
 
+            foreach ($bins as $bin) {
                 $nodeSorter = new LeftNodesFirstSorter();
 
                 $nodeList = $nodeSorter->sort($bin->nodeList());
@@ -32,6 +34,7 @@ class Packer
 
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
+                    $hasBeenPlaced = true;
 
                     break 2;
                 }
@@ -42,6 +45,7 @@ class Packer
                 if ($bin->canFit($item, $node)) {
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
+                    $hasBeenPlaced = true;
                 }
 
                 // If it cannot fit, we check whether the bin can grow right
@@ -49,7 +53,12 @@ class Packer
                     $bin->growRight($item);
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
+                    $hasBeenPlaced = true;
                 }
+            }
+
+            if (!$hasBeenPlaced) {
+                throw new ItemCannotBePlacedInRemainingBins($item, $bins);
             }
         }
 
@@ -58,14 +67,18 @@ class Packer
 
     /**
      * @param Item $item
-     * @param Bin $bin
+     * @param Bin[] $bins
      * @return void
-     * @throws CannotPackItems
+     * @throws ItemCannotFitInAnyBins
      */
-    private function assertItemFitsInAtLeastOneBin(Item $item, Bin $bin): void
+    private function assertItemFitsInAtLeastOneBin(Item $item, array $bins): void
     {
-        if ($item->width() > $bin->width || $item->height() > $bin->height) {
-            throw new CannotPackItems();
+        foreach ($bins as $bin) {
+            if ($item->width() <= $bin->width && $item->height() <= $bin->height) {
+                return;
+            }
         }
+
+        throw new ItemCannotFitInAnyBins($item, $bins);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use Hexium\BinPacking\Bin;
-use Hexium\BinPacking\CannotPackItems;
+use Hexium\BinPacking\ItemCannotFitInAnyBins;
 use Hexium\BinPacking\Packer;
 use Hexium\BinPacking\Test\TestItem;
 
@@ -27,7 +27,7 @@ it('cannot pack item bigger than bin on both sides', function () {
     $packedItems = $packer->pack($bins, $items);
 
     expect($packedItems)->toBeArray()->toHaveCount(0);
-})->throws(CannotPackItems::class);
+})->throws(ItemCannotFitInAnyBins::class);
 
 it('can place an item in a bin', function () {
     $packer = new Packer();

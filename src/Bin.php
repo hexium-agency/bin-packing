@@ -11,9 +11,11 @@ class Bin
      */
     public array $rectangles = [];
 
+    private int $xMax = 0;
+
     private NodeList $nodeList;
 
-    public function __construct(public int $width, public int $height)
+    public function __construct(public int $width, public int $height, private bool $canGrowRight = false)
     {
         $this->nodeList = new NodeList();
     }
@@ -28,6 +30,8 @@ class Bin
         $this->nodeList->removeNodesFrom($x, $y, $x, $item->height());
 
         $this->rectangles[] = new Rectangle($x, $y, $item->width(), $item->height());
+
+        $this->xMax = max($this->xMax, $x + $item->width());
 
         if ($x + $item->width() < $this->width) {
             $this->nodeList->nodes[] = new Node($x + $item->width(), $y);
@@ -113,5 +117,24 @@ class Bin
         }
 
         return true;
+    }
+
+    public function createNodeOnTopRight(): Node
+    {
+        $node = new Node($this->xMax, 0);
+
+        $this->nodeList->nodes[] = $node;
+
+        return $node;
+    }
+
+    public function canGrowRight(): bool
+    {
+        return $this->canGrowRight;
+    }
+
+    public function growRight(Item $item): void
+    {
+        $this->width += $item->width();
     }
 }

@@ -33,7 +33,22 @@ class Packer
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
 
-                    break;
+                    break 2;
+                }
+
+                // No node suitable for this item, add new node arbitrarily
+                $node = $bin->createNodeOnTopRight();
+
+                if ($bin->canFit($item, $node)) {
+                    $bin->placeItem($item, $node->x, $node->y);
+                    $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
+                }
+
+                // If it cannot fit, we check whether the bin can grow right
+                if ($bin->canGrowRight()) {
+                    $bin->growRight($item);
+                    $bin->placeItem($item, $node->x, $node->y);
+                    $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
                 }
             }
         }

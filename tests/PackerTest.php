@@ -107,3 +107,37 @@ it('places complex items', function () {
         ->and($packedItems[4]->xPosition)->toBe(2)->and($packedItems[4]->yPosition)->toBe(5)
     ;
 });
+
+it('creates arbitrarily a new node when none suits for the item', function () {
+    $packer = new Packer();
+
+    $bins = [new Bin(width: 9, height: 6)];
+
+    $items = [
+        new TestItem(width: 3, height: 3, id:"item1"),
+        new TestItem(width: 8, height: 3, id:"item2"),
+        new TestItem(width: 1, height: 4, id:"item3"),
+    ];
+
+    $packedItems = $packer->pack($bins, $items);
+
+    expect($packedItems)->toHaveCount(3);
+});
+
+it('creates arbitrarily a new node and grow the bin if needed', function () {
+    $packer = new Packer();
+
+    $bins = [new Bin(width: 9, height: 4, canGrowRight: true)];
+
+    $items = [
+        new TestItem(width: 5, height: 2, id:"item1"),
+        new TestItem(width: 4, height: 2, id:"item2"),
+        new TestItem(width: 4, height: 2, id:"item3"),
+        new TestItem(width: 4, height: 2, id:"item4"),
+        new TestItem(width: 4, height: 2, id:"item5"),
+    ];
+
+    $packedItems = $packer->pack($bins, $items);
+
+    expect($packedItems)->toHaveCount(5);
+});

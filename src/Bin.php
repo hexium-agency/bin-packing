@@ -137,4 +137,9 @@ class Bin
     {
         $this->width += $item->width();
     }
+
+    public function cloneEmpty(): Bin
+    {
+        return new Bin($this->width, $this->height, $this->canGrowRight);
+    }
 }

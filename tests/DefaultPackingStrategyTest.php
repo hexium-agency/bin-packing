@@ -2,23 +2,23 @@
 
 use Hexium\BinPacking\Bin;
 use Hexium\BinPacking\ItemCannotFitInAnyBins;
-use Hexium\BinPacking\Packer;
+use Hexium\BinPacking\PackingStrategies\DefaultStrategy;
 use Hexium\BinPacking\Test\TestItem;
 
 it('creates a packer', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [];
     $items = [];
 
     $packedItems = $packer->pack($bins, $items);
 
-    expect($packer)->toBeInstanceOf(Packer::class)
+    expect($packer)->toBeInstanceOf(DefaultStrategy::class)
         ->and($packedItems)->toBeArray()->toHaveCount(0);
 });
 
 it('cannot pack item bigger than bin on both sides', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 10, height: 10)];
 
@@ -30,7 +30,7 @@ it('cannot pack item bigger than bin on both sides', function () {
 })->throws(ItemCannotFitInAnyBins::class);
 
 it('can place an item in a bin', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 10, height: 10)];
 
@@ -47,7 +47,7 @@ it('can place an item in a bin', function () {
 });
 
 it('can place two items side by side in a bin', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 20, height: 10)];
 
@@ -66,7 +66,7 @@ it('can place two items side by side in a bin', function () {
 });
 
 it('places second item below the first one if height available', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 20, height: 20)];
 
@@ -85,7 +85,7 @@ it('places second item below the first one if height available', function () {
 });
 
 it('places complex items', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 8, height: 8)];
 
@@ -109,7 +109,7 @@ it('places complex items', function () {
 });
 
 it('creates arbitrarily a new node when none suits for the item', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 9, height: 6)];
 
@@ -125,7 +125,7 @@ it('creates arbitrarily a new node when none suits for the item', function () {
 });
 
 it('creates arbitrarily a new node and grow the bin if needed', function () {
-    $packer = new Packer();
+    $packer = new DefaultStrategy();
 
     $bins = [new Bin(width: 9, height: 4, canGrowRight: true)];
 
@@ -140,4 +140,18 @@ it('creates arbitrarily a new node and grow the bin if needed', function () {
     $packedItems = $packer->pack($bins, $items);
 
     expect($packedItems)->toHaveCount(5);
+});
+
+it('grows the bin if possible when an item cannot fit in at least one bin', function () {
+    $packer = new DefaultStrategy();
+
+    $bins = [new Bin(width: 9, height: 9, canGrowRight: true)];
+
+    $items = [
+        new TestItem(width: 10, height: 9, id:"item1"),
+    ];
+
+    $packedItems = $packer->pack($bins, $items);
+
+    expect($packedItems)->toHaveCount(1);
 });

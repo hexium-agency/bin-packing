@@ -80,6 +80,10 @@ class DefaultStrategy implements PackingStrategy
     private function assertItemFitsInAtLeastOneBin(Item $item, array $bins): void
     {
         foreach ($bins as $bin) {
+            if ($bin->canGrowRight() && $item->height() <= $bin->height) {
+                return;
+            }
+            
             if ($item->width() <= $bin->width && $item->height() <= $bin->height) {
                 return;
             }

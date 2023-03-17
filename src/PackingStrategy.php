@@ -7,9 +7,8 @@ namespace Hexium\BinPacking;
 interface PackingStrategy
 {
     /**
-     * @param array<Bin> $bins
      * @param array<Item> $items
      * @return BinResultCollection
      */
-    public function pack(array $bins, array $items): BinResultCollection;
+    public function pack(array $items): BinResultCollection;
 }

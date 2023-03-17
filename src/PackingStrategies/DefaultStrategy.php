@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hexium\BinPacking\PackingStrategies;
 
 use Hexium\BinPacking\Bin;
+use Hexium\BinPacking\BinFactory;
 use Hexium\BinPacking\BinResultCollection;
 use Hexium\BinPacking\Item;
 use Hexium\BinPacking\ItemCannotBePlacedInRemainingBins;
@@ -15,25 +16,35 @@ use Hexium\BinPacking\PackingStrategy;
 
 class DefaultStrategy implements PackingStrategy
 {
-    public function __construct(private bool $canCreateBin = false)
-    {
+    /**
+     * @param array<Bin> $bins
+     * @param bool $canCreateBin
+     * @param BinFactory|null $binFactory
+     */
+    public function __construct(
+        private array $bins = [],
+        private readonly bool $canCreateBin = false,
+        private readonly ?BinFactory $binFactory = null,
+    ) {
+        if ($canCreateBin && count($bins) === 0) {
+            $this->bins[] = $this->binFactory->create();
+        }
     }
 
     /**
-     * @param Bin[] $bins
      * @param Item[] $items
      * @throws ItemCannotFitInAnyBins
      * @throws ItemCannotBePlacedInRemainingBins
      */
-    public function pack(array $bins, array $items): BinResultCollection
+    public function pack(array $items): BinResultCollection
     {
         $collection = new BinResultCollection();
 
         foreach ($items as $item) {
-            $this->assertItemFitsInAtLeastOneBin($item, $bins);
+            $this->assertItemFitsInAtLeastOneBin($item, $this->bins);
             $hasBeenPlaced = false;
 
-            foreach ($bins as $bin) {
+            foreach ($this->bins as $bin) {
                 $nodeSorter = new LeftNodesFirstSorter();
 
                 $nodeList = $nodeSorter->sort($bin->nodeList());
@@ -53,8 +64,8 @@ class DefaultStrategy implements PackingStrategy
                 $topRightNode = $bin->nodeOnTopRight();
 
                 // No node suitable for this item, add new node arbitrarily
-                if ($bin->canFit($item, $topRightNode) && $topRightNode->x < $bin->width) {
-                    $bin->createNodeOnTopRight();
+                if ($topRightNode->x < $bin->width && $bin->canFit($item, $topRightNode)) {
+                    $node = $bin->createNodeOnTopRight();
                     $bin->placeItem($item, $node->x, $node->y);
                     $collection[$bin]->add(new PackedItem($item, $bin, $node->x, $node->y));
                     $hasBeenPlaced = true;
@@ -71,14 +82,16 @@ class DefaultStrategy implements PackingStrategy
             }
 
             if ($this->canCreateBin) {
-                $newBin = $bin->cloneEmpty();
+                $newBin = $this->binFactory->create();
+                $this->bins[] = $newBin;
                 $newBin->placeItem($item, 0, 0);
-                $collection[$bin]->add(new PackedItem($item, $bin, $node->x, $node->y));
+                $node = $newBin->nodeList()->first();
+                $collection[$newBin]->add(new PackedItem($item, $newBin, $node->x, $node->y));
                 $hasBeenPlaced = true;
             }
 
             if (!$hasBeenPlaced) {
-                throw new ItemCannotBePlacedInRemainingBins($item, $bins);
+                throw new ItemCannotBePlacedInRemainingBins($item, $this->bins);
             }
         }
 

@@ -65,4 +65,9 @@ class NodeList implements \Countable
             }
         }
     }
+
+    public function first(): Node
+    {
+        return reset($this->nodes);
+    }
 }

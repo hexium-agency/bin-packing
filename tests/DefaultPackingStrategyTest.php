@@ -14,7 +14,7 @@ it('creates a packer', function () {
     $packedItems = $packer->pack($bins, $items);
 
     expect($packer)->toBeInstanceOf(DefaultStrategy::class)
-        ->and($packedItems)->toBeArray()->toHaveCount(0);
+        ->and($packedItems)->toHaveCount(0);
 });
 
 it('cannot pack item bigger than bin on both sides', function () {
@@ -36,12 +36,14 @@ it('can place an item in a bin', function () {
 
     $items = [new TestItem(width: 10, height: 10, id:"item1")];
 
-    $packedItems = $packer->pack($bins, $items);
-    $packedItem = $packedItems[0];
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toBeArray()->toHaveCount(1)
-        ->and($packedItems[0]->bin)->toBe($bins[0])
-        ->and($packedItems[0]->item)->toBe($items[0])
+    $packedItem = $firstBin->items[0];
+
+    expect($firstBin)->toHaveCount(1)
+        ->and($firstBin->bin)->toBe($bins[0])
+        ->and($firstBin->items)->toHaveCount(1)
         ->and($packedItem->xPosition)->toBe(0)
         ->and($packedItem->yPosition)->toBe(0);
 });
@@ -56,13 +58,14 @@ it('can place two items side by side in a bin', function () {
         new TestItem(width: 10, height: 10, id:"item2"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toBeArray()->toHaveCount(2)
-        ->and($packedItems[0]->xPosition)->toBe(0)
-        ->and($packedItems[0]->yPosition)->toBe(0)
-        ->and($packedItems[1]->xPosition)->toBe(10)
-        ->and($packedItems[1]->yPosition)->toBe(0);
+    expect($firstBin)->toHaveCount(2)
+        ->and($firstBin->items[0]->xPosition)->toBe(0)
+        ->and($firstBin->items[0]->yPosition)->toBe(0)
+        ->and($firstBin->items[1]->xPosition)->toBe(10)
+        ->and($firstBin->items[1]->yPosition)->toBe(0);
 });
 
 it('places second item below the first one if height available', function () {
@@ -75,13 +78,14 @@ it('places second item below the first one if height available', function () {
         new TestItem(width: 10, height: 10, id:"item2"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toBeArray()->toHaveCount(2)
-        ->and($packedItems[0]->xPosition)->toBe(0)
-        ->and($packedItems[0]->yPosition)->toBe(0)
-        ->and($packedItems[1]->xPosition)->toBe(0)
-        ->and($packedItems[1]->yPosition)->toBe(10);
+    expect($firstBin)->toHaveCount(2)
+        ->and($firstBin->items[0]->xPosition)->toBe(0)
+        ->and($firstBin->items[0]->yPosition)->toBe(0)
+        ->and($firstBin->items[1]->xPosition)->toBe(0)
+        ->and($firstBin->items[1]->yPosition)->toBe(10);
 });
 
 it('places complex items', function () {
@@ -97,14 +101,15 @@ it('places complex items', function () {
         new TestItem(width: 1, height: 2, id:"item5"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toBeArray()->toHaveCount(5)
-        ->and($packedItems[0]->xPosition)->toBe(0)->and($packedItems[0]->yPosition)->toBe(0)
-        ->and($packedItems[1]->xPosition)->toBe(0)->and($packedItems[1]->yPosition)->toBe(5)
-        ->and($packedItems[2]->xPosition)->toBe(1)->and($packedItems[2]->yPosition)->toBe(0)
-        ->and($packedItems[3]->xPosition)->toBe(1)->and($packedItems[3]->yPosition)->toBe(3)
-        ->and($packedItems[4]->xPosition)->toBe(2)->and($packedItems[4]->yPosition)->toBe(5)
+    expect($firstBin)->toHaveCount(5)
+        ->and($firstBin->items[0]->xPosition)->toBe(0)->and($firstBin->items[0]->yPosition)->toBe(0)
+        ->and($firstBin->items[1]->xPosition)->toBe(0)->and($firstBin->items[1]->yPosition)->toBe(5)
+        ->and($firstBin->items[2]->xPosition)->toBe(1)->and($firstBin->items[2]->yPosition)->toBe(0)
+        ->and($firstBin->items[3]->xPosition)->toBe(1)->and($firstBin->items[3]->yPosition)->toBe(3)
+        ->and($firstBin->items[4]->xPosition)->toBe(2)->and($firstBin->items[4]->yPosition)->toBe(5)
     ;
 });
 
@@ -119,9 +124,10 @@ it('creates arbitrarily a new node when none suits for the item', function () {
         new TestItem(width: 1, height: 4, id:"item3"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toHaveCount(3);
+    expect($firstBin)->toHaveCount(3);
 });
 
 it('creates arbitrarily a new node and grow the bin if needed', function () {
@@ -137,9 +143,10 @@ it('creates arbitrarily a new node and grow the bin if needed', function () {
         new TestItem(width: 4, height: 2, id:"item5"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toHaveCount(5);
+    expect($firstBin)->toHaveCount(5);
 });
 
 it('grows the bin if possible when an item cannot fit in at least one bin', function () {
@@ -151,9 +158,10 @@ it('grows the bin if possible when an item cannot fit in at least one bin', func
         new TestItem(width: 10, height: 9, id:"item1"),
     ];
 
-    $packedItems = $packer->pack($bins, $items);
+    $resultBins = $packer->pack($bins, $items);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toHaveCount(1);
+    expect($firstBin)->toHaveCount(1);
 });
 
 
@@ -162,11 +170,12 @@ it('can allow an item to exceed width', function () {
 
     $bin = new Bin(width: 8, height: 8, canExceedWidth: true);
 
-    $item1 = new TestItem(width: 9, height: 8, id: "item1");
+    $item = new TestItem(width: 9, height: 8, id: "item1");
 
-    $packedItems = $packer->pack([$bin], [$item1]);
+    $resultBins = $packer->pack([$bin], [$item]);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toHaveCount(1);
+    expect($firstBin)->toHaveCount(1);
 });
 
 it('can allow an item to exceed height', function () {
@@ -174,9 +183,10 @@ it('can allow an item to exceed height', function () {
 
     $bin = new Bin(width: 8, height: 8, canExceedHeight: true);
 
-    $item1 = new TestItem(width: 1, height: 9, id: "item1");
+    $item = new TestItem(width: 1, height: 9, id: "item1");
 
-    $packedItems = $packer->pack([$bin], [$item1]);
+    $resultBins = $packer->pack([$bin], [$item]);
+    $firstBin = $resultBins->first();
 
-    expect($packedItems)->toHaveCount(1);
+    expect($firstBin)->toHaveCount(1);
 });

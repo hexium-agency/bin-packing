@@ -20,7 +20,7 @@ class Packer
      * @param array<Item> $items
      * @throws ItemCannotBePlacedInRemainingBins|ItemCannotFitInAnyBins
      */
-    public function pack(array $bins, array $items): array
+    public function pack(array $bins, array $items): BinResultCollection
     {
         return $this->packingStrategy->pack($bins, $items);
     }

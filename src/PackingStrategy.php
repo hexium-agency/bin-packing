@@ -9,7 +9,7 @@ interface PackingStrategy
     /**
      * @param array<Bin> $bins
      * @param array<Item> $items
-     * @return array
+     * @return BinResultCollection
      */
-    public function pack(array $bins, array $items): array;
+    public function pack(array $bins, array $items): BinResultCollection;
 }

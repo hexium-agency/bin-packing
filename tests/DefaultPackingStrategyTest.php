@@ -155,3 +155,28 @@ it('grows the bin if possible when an item cannot fit in at least one bin', func
 
     expect($packedItems)->toHaveCount(1);
 });
+
+
+it('can allow an item to exceed width', function () {
+    $packer = new DefaultStrategy();
+
+    $bin = new Bin(width: 8, height: 8, canExceedWidth: true);
+
+    $item1 = new TestItem(width: 9, height: 1, id: "item1");
+
+    $packedItems = $packer->pack([$bin], [$item1]);
+
+    expect($packedItems)->toHaveCount(1);
+});
+
+it('can allow an item to exceed height', function () {
+    $packer = new DefaultStrategy();
+
+    $bin = new Bin(width: 8, height: 8, canExceedHeight: true);
+
+    $item1 = new TestItem(width: 1, height: 9, id: "item1");
+
+    $packedItems = $packer->pack([$bin], [$item1]);
+    
+    expect($packedItems)->toHaveCount(1);
+});

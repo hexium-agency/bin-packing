@@ -152,4 +152,9 @@ class Bin
     {
         return $this->canExceedWidth;
     }
+
+    public function allowExceedHeight(): bool
+    {
+        return $this->canExceedHeight;
+    }
 }

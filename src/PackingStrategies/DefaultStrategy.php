@@ -93,6 +93,10 @@ class DefaultStrategy implements PackingStrategy
                 return;
             }
 
+            if ($item->width() <= $bin->width && $bin->allowExceedHeight()) {
+                return;
+            }
+
             if ($item->width() <= $bin->width && $item->height() <= $bin->height) {
                 return;
             }

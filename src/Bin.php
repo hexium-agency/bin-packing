@@ -133,6 +133,11 @@ class Bin
         return $node;
     }
 
+    public function nodeOnTopRight(): Node
+    {
+        return new Node($this->xMax, 0);
+    }
+
     public function canGrowRight(): bool
     {
         return $this->canGrowRight;

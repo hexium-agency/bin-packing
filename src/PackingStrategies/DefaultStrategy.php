@@ -49,10 +49,11 @@ class DefaultStrategy implements PackingStrategy
                     break 2;
                 }
 
-                // No node suitable for this item, add new node arbitrarily
-                $node = $bin->createNodeOnTopRight();
+                $topRightNode = $bin->nodeOnTopRight();
 
-                if ($bin->canFit($item, $node)) {
+                // No node suitable for this item, add new node arbitrarily
+                if ($bin->canFit($item, $topRightNode) && $topRightNode->x < $bin->width) {
+                    $bin->createNodeOnTopRight();
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
                     $hasBeenPlaced = true;
@@ -60,6 +61,7 @@ class DefaultStrategy implements PackingStrategy
 
                 // If it cannot fit, we check whether the bin can grow right
                 if ($bin->canGrowRight()) {
+                    $node = $bin->createNodeOnTopRight();
                     $bin->growRight($item);
                     $bin->placeItem($item, $node->x, $node->y);
                     $packedItems[] = new PackedItem($item, $bin, $node->x, $node->y);
@@ -70,6 +72,7 @@ class DefaultStrategy implements PackingStrategy
             if ($this->canCreateBin) {
                 $newBin = $bin->cloneEmpty();
                 $newBin->placeItem($item, 0, 0);
+                $hasBeenPlaced = true;
             }
 
             if (!$hasBeenPlaced) {

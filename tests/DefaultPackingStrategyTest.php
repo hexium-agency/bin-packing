@@ -162,7 +162,7 @@ it('can allow an item to exceed width', function () {
 
     $bin = new Bin(width: 8, height: 8, canExceedWidth: true);
 
-    $item1 = new TestItem(width: 9, height: 1, id: "item1");
+    $item1 = new TestItem(width: 9, height: 8, id: "item1");
 
     $packedItems = $packer->pack([$bin], [$item1]);
 
@@ -177,6 +177,6 @@ it('can allow an item to exceed height', function () {
     $item1 = new TestItem(width: 1, height: 9, id: "item1");
 
     $packedItems = $packer->pack([$bin], [$item1]);
-    
+
     expect($packedItems)->toHaveCount(1);
 });

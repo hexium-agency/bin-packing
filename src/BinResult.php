@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Hexium\BinPacking;
 
-class BinResult implements \Countable
+use Traversable;
+
+class BinResult implements \Countable, \IteratorAggregate
 {
     /**
      * @var PackedItem[]
@@ -24,5 +26,10 @@ class BinResult implements \Countable
     public function count(): int
     {
         return count($this->items);
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new \ArrayIterator($this->items);
     }
 }

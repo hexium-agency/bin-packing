@@ -15,8 +15,13 @@ class Bin
 
     private NodeList $nodeList;
 
-    public function __construct(public int $width, public int $height, private bool $canGrowRight = false)
-    {
+    public function __construct(
+        public int $width,
+        public int $height,
+        private bool $canGrowRight = false,
+        private bool $canExceedWidth = false,
+        private bool $canExceedHeight = false,
+    ) {
         $this->nodeList = new NodeList();
     }
 
@@ -47,11 +52,11 @@ class Bin
         $x = $node->x;
         $y = $node->y;
 
-        if ($x + $bigItem->width() > $this->width) {
+        if (!$this->canExceedWidth && $x + $bigItem->width() > $this->width) {
             return false;
         }
 
-        if ($y + $bigItem->height() > $this->height) {
+        if (!$this->canExceedHeight && $y + $bigItem->height() > $this->height) {
             return false;
         }
 

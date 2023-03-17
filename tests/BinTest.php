@@ -135,3 +135,19 @@ it('cannot place an item having no corner in another rectangle but overflowing i
     $item6 = new TestItem(width: 1, height: 6, id: "item6");
     expect($bin->canFit($item6, $bin->nodeList()->at(3, 3)))->toBeFalse();
 });
+
+it('can allow an item to exceed width', function () {
+    $bin = new Bin(width: 8, height: 8, canExceedWidth: true);
+
+    $item1 = new TestItem(width: 9, height: 1, id: "item1");
+
+    expect($bin->canFit($item1, $bin->nodeList()->at(0, 0)))->toBeTrue();
+});
+
+it('can allow an item to exceed height', function () {
+    $bin = new Bin(width: 8, height: 8, canExceedHeight: true);
+
+    $item1 = new TestItem(width: 1, height: 9, id: "item1");
+
+    expect($bin->canFit($item1, $bin->nodeList()->at(0, 0)))->toBeTrue();
+});

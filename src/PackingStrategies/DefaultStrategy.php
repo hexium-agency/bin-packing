@@ -69,6 +69,7 @@ class DefaultStrategy implements PackingStrategy
                     $bin->placeItem($item, $node->x, $node->y);
                     $collection[$bin]->add(new PackedItem($item, $bin, $node->x, $node->y));
                     $hasBeenPlaced = true;
+                    break;
                 }
 
                 // If it cannot fit, we check whether the bin can grow right
@@ -78,6 +79,7 @@ class DefaultStrategy implements PackingStrategy
                     $bin->placeItem($item, $node->x, $node->y);
                     $collection[$bin]->add(new PackedItem($item, $bin, $node->x, $node->y));
                     $hasBeenPlaced = true;
+                    break;
                 }
             }
 

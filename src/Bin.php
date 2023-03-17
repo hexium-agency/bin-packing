@@ -147,4 +147,9 @@ class Bin
     {
         return new Bin($this->width, $this->height, $this->canGrowRight);
     }
+
+    public function allowExceedWith(): bool
+    {
+        return $this->canExceedWidth;
+    }
 }

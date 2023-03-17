@@ -14,6 +14,10 @@ use Hexium\BinPacking\PackingStrategy;
 
 class DefaultStrategy implements PackingStrategy
 {
+    public function __construct(private bool $canCreateBin = false)
+    {
+    }
+
     /**
      * @param Bin[] $bins
      * @param Item[] $items
@@ -63,6 +67,11 @@ class DefaultStrategy implements PackingStrategy
                 }
             }
 
+            if ($this->canCreateBin) {
+                $newBin = $bin->cloneEmpty();
+                $newBin->placeItem($item, 0, 0);
+            }
+
             if (!$hasBeenPlaced) {
                 throw new ItemCannotBePlacedInRemainingBins($item, $bins);
             }
@@ -80,10 +89,10 @@ class DefaultStrategy implements PackingStrategy
     private function assertItemFitsInAtLeastOneBin(Item $item, array $bins): void
     {
         foreach ($bins as $bin) {
-            if ($bin->canGrowRight() && $item->height() <= $bin->height) {
+            if ($item->height() <= $bin->height && ($bin->allowExceedWith() || $bin->canGrowRight())) {
                 return;
             }
-            
+
             if ($item->width() <= $bin->width && $item->height() <= $bin->height) {
                 return;
             }

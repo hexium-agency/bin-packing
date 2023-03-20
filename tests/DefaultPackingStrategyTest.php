@@ -190,3 +190,25 @@ it('can allow an item to exceed height', function () {
 
     expect($firstBin)->toHaveCount(1);
 });
+
+it('pack items in multiple bins', function () {
+    $bins = [
+        new Bin(width: 8, height: 8, canGrowRight: false, canExceedWidth: false, canExceedHeight: false),
+        new Bin(width: 8, height: 8, canGrowRight: false, canExceedWidth: false, canExceedHeight: false),
+    ];
+
+    $packer = new DefaultStrategy(bins: $bins);
+
+    $items = [
+        new TestItem(width: 4, height: 8, id:"item1"),
+        new TestItem(width: 4, height: 8, id:"item2"),
+        new TestItem(width: 4, height: 8, id:"item3"),
+        new TestItem(width: 4, height: 8, id:"item4"),
+    ];
+
+    $resultBins = $packer->pack($items);
+
+    expect($resultBins)->toHaveCount(2)
+        ->and($resultBins[$bins[0]])->toHaveCount(2)
+        ->and($resultBins[$bins[1]])->toHaveCount(2);
+});

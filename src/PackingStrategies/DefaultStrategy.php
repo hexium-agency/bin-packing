@@ -86,8 +86,8 @@ class DefaultStrategy implements PackingStrategy
             if (!$hasBeenPlaced && $this->canCreateBin) {
                 $newBin = $this->binFactory->create();
                 $this->bins[] = $newBin;
-                $newBin->placeItem($item, 0, 0);
                 $node = $newBin->nodeList()->first();
+                $newBin->placeItem($item, $node->x, $node->y);
                 $collection[$newBin]->add(new PackedItem($item, $newBin, $node->x, $node->y));
                 $hasBeenPlaced = true;
             }
